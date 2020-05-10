@@ -70,7 +70,10 @@ def bill_message(message):
 
 @bot.message_handler(commands=['check'])
 def check_message(message):
-    bot.send_message(message.chat.id, 'К сожалению в данный момент раздел в разработке')
+    check_keyboard = types.InlineKeyboardMarkup(row_width=1)
+    menu_button = types.InlineKeyboardButton(text="Вернуться в главное меню", callback_data="/menu")
+    check_keyboard.add(menu_button)
+    bot.send_message(message.chat.id, 'К сожалению в данный момент раздел в разработке', reply_markup=check_keyboard)
 
 
 @bot.message_handler(content_types=["text"])
