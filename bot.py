@@ -30,8 +30,9 @@ def help_message(message):
     bill_button = types.InlineKeyboardButton(text="/bill - квитанция за КУ", callback_data="/bill")
     check_button = types.InlineKeyboardButton(text="/check - проверка платежей и наличия задолженности",
                                               callback_data="/check")
+    news_button = types.InlineKeyboardButton(text="/news - показать новости", callback_data="/news")
 
-    help_keyboard.add(start_button, help_button, tsn_button, government_button, bill_button, check_button)
+    help_keyboard.add(start_button, help_button, tsn_button, government_button, bill_button, check_button, news_button)
     bot.send_message(message.chat.id, menu.HELP_MENU, reply_markup=help_keyboard)
 
 
@@ -54,7 +55,6 @@ def tsn_requisites_message(message):
     bot.send_message(message.chat.id, menu.TSN_REQUISITES, reply_markup=tsn_keyboard)
 
 
-
 @bot.message_handler(commands=['contacts'])
 def tsn_contacts_message(message):
     tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
@@ -64,9 +64,19 @@ def tsn_contacts_message(message):
     bot.send_message(message.chat.id, menu.TSN_CONTACTS, reply_markup=tsn_keyboard)
 
 
+@bot.message_handler(commands=['government'])
+def government_message(message):
+    government_keyboard = types.InlineKeyboardMarkup(row_width=1)
+    menu_button = types.InlineKeyboardButton(text="Вернуться в главное меню", callback_data="/menu")
+    government_keyboard.add(menu_button)
+    bot.send_message(message.chat.id, 'К сожалению в данный момент раздел в разработке',
+                     reply_markup=government_keyboard)
+
+
 @bot.message_handler(commands=['bill'])
 def bill_message(message):
     bot.send_message(message.chat.id, 'К сожалению в данный момент раздел в разработке')
+
 
 @bot.message_handler(commands=['check'])
 def check_message(message):
@@ -74,6 +84,14 @@ def check_message(message):
     menu_button = types.InlineKeyboardButton(text="Вернуться в главное меню", callback_data="/menu")
     check_keyboard.add(menu_button)
     bot.send_message(message.chat.id, 'К сожалению в данный момент раздел в разработке', reply_markup=check_keyboard)
+
+
+@bot.message_handler(commands=['news'])
+def news_message(message):
+    news_keyboard = types.InlineKeyboardMarkup(row_width=1)
+    menu_button = types.InlineKeyboardButton(text="Вернуться в главное меню", callback_data="/menu")
+    news_keyboard.add(menu_button)
+    bot.send_message(message.chat.id, 'К сожалению в данный момент раздел в разработке', reply_markup=news_keyboard)
 
 
 @bot.message_handler(content_types=["text"])
@@ -86,7 +104,8 @@ def default_text(message):
 
 # -----------------------------------------------Keyboard handlers----------------------------------
 # main menu keyboard handler
-@bot.callback_query_handler(func=lambda call: call.data in ["/start", "/menu", "/tsn", "/bill", "/check"])
+@bot.callback_query_handler(func=lambda call: call.data in ["/start", "/menu", "/tsn", "/government", "/bill",
+                                                            "/check", "/news"])
 def callback_main_command(call):
     if call.data == "/start":
         start_message(call.message)
@@ -94,10 +113,14 @@ def callback_main_command(call):
         help_message(call.message)
     elif call.data == "/tsn":
         tsn_message(call.message)
+    elif call.data == "/government":
+        government_message(call.message)
     elif call.data == "/bill":
         bill_message(call.message)
     elif call.data == "/check":
         check_message(call.message)
+    elif call.data == "/news":
+        news_message(call.message)
 
 
 # tsn keyboard handler
