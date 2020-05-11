@@ -14,5 +14,5 @@ Telegram bot для ТСН "Ладожский маяк"
 
 
 ## Техническое описание
-Язык разработки  python3, основная библиотека telebot https://github.com/eternnoir/pyTelegramBotAPI
+Язык разработки  python3, основная библиотека [telebot](https://github.com/eternnoir/pyTelegramBotAPI)
 Документация для разработки в файле develop.md
