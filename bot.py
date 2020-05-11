@@ -1,7 +1,10 @@
-import menu, keyboards
-import telebot
 import os
+
+import telebot
 from telebot import types
+
+import keyboards
+import menu
 
 bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 
@@ -20,8 +23,8 @@ def start_message(message):
 # help menu
 @bot.message_handler(commands=['help', 'menu'])
 def help_message(message):
+    message_menu = menu.get_menu("SELECT text FROM menu_text WHERE name LIKE 'help'")
     help_keyboard = types.InlineKeyboardMarkup(row_width=1)
-
     start_button = types.InlineKeyboardButton(text="/start - показать приветствие", callback_data="/start")
     help_button = types.InlineKeyboardButton(text="/help -  показать список всех команд", callback_data="/menu")
     tsn_button = types.InlineKeyboardButton(text="/tsn - показать информацию о ТСН", callback_data='/tsn')
@@ -33,7 +36,7 @@ def help_message(message):
     news_button = types.InlineKeyboardButton(text="/news - показать новости", callback_data="/news")
 
     help_keyboard.add(start_button, help_button, tsn_button, government_button, bill_button, check_button, news_button)
-    bot.send_message(message.chat.id, menu.HELP_MENU, reply_markup=help_keyboard)
+    bot.send_message(message.chat.id, message_menu, reply_markup=help_keyboard)
 
 # tsn menu
 @bot.message_handler(commands=['tsn'])
@@ -48,20 +51,22 @@ def tsn_message(message):
 
 @bot.message_handler(commands=['requisites'])
 def tsn_requisites_message(message):
+    message_menu = menu.get_menu("SELECT text FROM tsn_info WHERE name LIKE 'requisites'")
     tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
     tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
     tsn_keyboard.add(tsn_button)
     keyboards.main_menu_key(tsn_keyboard)
-    bot.send_message(message.chat.id, menu.TSN_REQUISITES, reply_markup=tsn_keyboard)
+    bot.send_message(message.chat.id, message_menu, reply_markup=tsn_keyboard)
 
 
 @bot.message_handler(commands=['contacts'])
 def tsn_contacts_message(message):
+    message_menu = menu.get_menu("SELECT text FROM tsn_info WHERE name LIKE 'contacts'")
     tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
     tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
     tsn_keyboard.add(tsn_button)
     keyboards.main_menu_key(tsn_keyboard)
-    bot.send_message(message.chat.id, menu.TSN_CONTACTS, reply_markup=tsn_keyboard)
+    bot.send_message(message.chat.id, message_menu, reply_markup=tsn_keyboard)
 
 
 @bot.message_handler(commands=['government'])
