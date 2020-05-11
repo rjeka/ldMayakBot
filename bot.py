@@ -1,4 +1,4 @@
-import menu
+import menu, keyboards
 import telebot
 import os
 from telebot import types
@@ -17,7 +17,7 @@ def start_message(message):
 
     bot.send_message(message.chat.id, menu.START_MENU.format(message.from_user.first_name), reply_markup=start_keyboard)
 
-
+# help menu
 @bot.message_handler(commands=['help', 'menu'])
 def help_message(message):
     help_keyboard = types.InlineKeyboardMarkup(row_width=1)
@@ -35,14 +35,14 @@ def help_message(message):
     help_keyboard.add(start_button, help_button, tsn_button, government_button, bill_button, check_button, news_button)
     bot.send_message(message.chat.id, menu.HELP_MENU, reply_markup=help_keyboard)
 
-
+# tsn menu
 @bot.message_handler(commands=['tsn'])
 def tsn_message(message):
     tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
     requisites_button = types.InlineKeyboardButton(text="реквизиты ТСН", callback_data="/requisites")
     contacts_button = types.InlineKeyboardButton(text="полезные телефоны", callback_data="/contacts")
-    menu_button = types.InlineKeyboardButton(text="вернуться в главное меню", callback_data="/menu")
-    tsn_keyboard.add(requisites_button, contacts_button, menu_button)
+    tsn_keyboard.add(requisites_button, contacts_button)
+    keyboards.main_menu_key(tsn_keyboard)
     bot.send_message(message.chat.id, "Выберите раздел\n", reply_markup=tsn_keyboard)
 
 
@@ -50,8 +50,8 @@ def tsn_message(message):
 def tsn_requisites_message(message):
     tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
     tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
-    menu_button = types.InlineKeyboardButton(text="Вернуться в главное меню", callback_data="/menu")
-    tsn_keyboard.add(tsn_button, menu_button)
+    tsn_keyboard.add(tsn_button)
+    keyboards.main_menu_key(tsn_keyboard)
     bot.send_message(message.chat.id, menu.TSN_REQUISITES, reply_markup=tsn_keyboard)
 
 
@@ -59,16 +59,15 @@ def tsn_requisites_message(message):
 def tsn_contacts_message(message):
     tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
     tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
-    menu_button = types.InlineKeyboardButton(text="Вернуться в главное меню", callback_data="/menu")
-    tsn_keyboard.add(tsn_button, menu_button)
+    tsn_keyboard.add(tsn_button)
+    keyboards.main_menu_key(tsn_keyboard)
     bot.send_message(message.chat.id, menu.TSN_CONTACTS, reply_markup=tsn_keyboard)
 
 
 @bot.message_handler(commands=['government'])
 def government_message(message):
     government_keyboard = types.InlineKeyboardMarkup(row_width=1)
-    menu_button = types.InlineKeyboardButton(text="Вернуться в главное меню", callback_data="/menu")
-    government_keyboard.add(menu_button)
+    keyboards.main_menu_key(government_keyboard)
     bot.send_message(message.chat.id, 'К сожалению в данный момент раздел в разработке',
                      reply_markup=government_keyboard)
 
@@ -81,24 +80,21 @@ def bill_message(message):
 @bot.message_handler(commands=['check'])
 def check_message(message):
     check_keyboard = types.InlineKeyboardMarkup(row_width=1)
-    menu_button = types.InlineKeyboardButton(text="Вернуться в главное меню", callback_data="/menu")
-    check_keyboard.add(menu_button)
+    keyboards.main_menu_key(check_keyboard)
     bot.send_message(message.chat.id, 'К сожалению в данный момент раздел в разработке', reply_markup=check_keyboard)
 
 
 @bot.message_handler(commands=['news'])
 def news_message(message):
     news_keyboard = types.InlineKeyboardMarkup(row_width=1)
-    menu_button = types.InlineKeyboardButton(text="Вернуться в главное меню", callback_data="/menu")
-    news_keyboard.add(menu_button)
+    keyboards.main_menu_key(news_keyboard)
     bot.send_message(message.chat.id, 'К сожалению в данный момент раздел в разработке', reply_markup=news_keyboard)
 
 
 @bot.message_handler(content_types=["text"])
 def default_text(message):
     default_keyboard = types.InlineKeyboardMarkup(row_width=1)
-    menu_button = types.InlineKeyboardButton(text="Вернуться в главное меню", callback_data="/menu")
-    default_keyboard.add(menu_button)
+    keyboards.main_menu_key(default_keyboard)
     bot.send_message(message.chat.id, 'К сожалению я не знаю такой команды', reply_markup=default_keyboard)
 
 
