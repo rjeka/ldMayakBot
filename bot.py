@@ -44,7 +44,8 @@ def tsn_message(message):
     tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
     requisites_button = types.InlineKeyboardButton(text="реквизиты ТСН", callback_data="/requisites")
     contacts_button = types.InlineKeyboardButton(text="полезные телефоны", callback_data="/contacts")
-    tsn_keyboard.add(requisites_button, contacts_button)
+    street_button = types.InlineKeyboardButton(text="список улиц", callback_data="/street")
+    tsn_keyboard.add(requisites_button, contacts_button, street_button)
     keyboards.main_menu_key(tsn_keyboard)
     bot.send_message(message.chat.id, "Выберите раздел\n", reply_markup=tsn_keyboard)
 
@@ -62,6 +63,15 @@ def tsn_requisites_message(message):
 @bot.message_handler(commands=['contacts'])
 def tsn_contacts_message(message):
     message_menu = menu.get_menu("SELECT text FROM tsn_info WHERE name LIKE 'contacts'")
+    tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
+    tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
+    tsn_keyboard.add(tsn_button)
+    keyboards.main_menu_key(tsn_keyboard)
+    bot.send_message(message.chat.id, message_menu, reply_markup=tsn_keyboard)
+
+@bot.message_handler(commands=['street'])
+def tsn_streets_message(message):
+    message_menu = menu.all_street("SELECT name FROM street")
     tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
     tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
     tsn_keyboard.add(tsn_button)
@@ -125,12 +135,14 @@ def callback_main_command(call):
 
 
 # tsn keyboard handler
-@bot.callback_query_handler(func=lambda call: call.data in ["/requisites", "/contacts"])
+@bot.callback_query_handler(func=lambda call: call.data in ["/requisites", "/contacts", "/street"])
 def callback_tsn_command(call):
     if call.data == "/requisites":
         tsn_requisites_message(call.message)
     elif call.data == "/contacts":
         tsn_contacts_message(call.message)
+    elif call.data == "/street":
+        tsn_streets_message(call.message)
 
 
 if __name__ == '__main__':
