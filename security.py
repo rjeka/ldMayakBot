@@ -11,15 +11,15 @@ def check_user_id(user_id):
         host=os.environ['DB_HOST'],
         port=os.environ['DB_PORT']
     )
+    if user_id:
+        with con:
+            with con.cursor() as cur:
+                cur.execute("SELECT second_auto_number FROM users WHERE telegram_id={}".format(user_id))
+                rows = cur.fetchall()
 
-    with con:
-        with con.cursor() as cur:
-            cur.execute("SELECT second_auto_number FROM users WHERE telegram_id={}".format(user_id))
-            rows = cur.fetchall()
-
-    if rows:
-        return True
-        print("true")
+        if rows:
+            return True
+        else:
+            return False
     else:
-        print("false")
         return False
