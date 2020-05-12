@@ -2,7 +2,7 @@ import psycopg2
 import os
 
 
-def check_user_id():
+def check_user_id(user_id):
 
     con: None = psycopg2.connect(
         database=os.environ['DB_NAME'],
@@ -14,7 +14,7 @@ def check_user_id():
 
     with con:
         with con.cursor() as cur:
-            cur.execute("SELECT second_auto_number FROM users WHERE telegram_id=1270933806")
+            cur.execute("SELECT second_auto_number FROM users WHERE telegram_id={}".format(user_id))
             rows = cur.fetchall()
 
     if rows:

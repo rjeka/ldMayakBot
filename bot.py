@@ -54,7 +54,7 @@ def tsn_message(message):
 
 @bot.message_handler(commands=['userinfo'])
 def tsn_userinfo_message(message, user_info):
-    if security.check_user_id():
+    if security.check_user_id(user_info.id):
         message_menu = menu.get_user_info("SELECT * from users;")
         tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
         tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
