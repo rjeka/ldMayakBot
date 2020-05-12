@@ -1,5 +1,8 @@
 venv/
 .idea/
 __pycache__/
+google/
 ldmayak_bot.yaml
 Postgres/
+googletable_to_db_test.py
+db_test.py
