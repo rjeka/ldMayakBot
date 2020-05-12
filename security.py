@@ -14,7 +14,7 @@ def check_user_id(user_id):
     if user_id:
         with con:
             with con.cursor() as cur:
-                cur.execute("SELECT second_auto_number FROM users WHERE telegram_id={}".format(user_id))
+                cur.execute("SELECT telegram_id FROM users WHERE telegram_id={}".format(user_id))
                 rows = cur.fetchall()
 
         if rows:

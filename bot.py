@@ -5,8 +5,10 @@ from telebot import types
 
 import keyboards
 import menu
+import utilities
 
 import tsn
+
 
 bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 
@@ -109,7 +111,7 @@ def default_text(message):
     keyboards.main_menu_key(default_keyboard)
     bot.send_message(message.chat.id, 'К сожалению я не знаю такой команды', reply_markup=default_keyboard)
 
-@bot.message_handler(content_types=["getid"])
+
 def get_id_message(message, user_info):
     get_id_keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboards.main_menu_key(get_id_keyboard)
@@ -150,7 +152,7 @@ def callback_tsn_command(call):
     elif call.data == "/street":
         tsn_streets_message(call.message)
     elif call.data == "/getid":
-        get_id_message(call.message, call.from_user.id)
+        utilities.get_id(call.message, call.from_user.id)
 
 
 if __name__ == '__main__':
