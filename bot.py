@@ -45,11 +45,6 @@ def help_message(message):
 def tsn_message(message):
     tsn.tsn(message)
 
-# tsn userinfo
-@bot.message_handler(commands=['userinfo'])
-def tsn_userinfo_message(message, user_info=""):
-    tsn.tsn_userinfo(message, user_info="")
-
 
 
 @bot.message_handler(commands=['requisites'])
@@ -147,8 +142,7 @@ def callback_main_command(call):
 @bot.callback_query_handler(func=lambda call: call.data in ["/userinfo", "/requisites", "/contacts", "/street", "/getid"])
 def callback_tsn_command(call):
     if call.data == "/userinfo":
-        print(call.from_user.id)
-        tsn_userinfo_message(call.message, call.from_user.id)
+        tsn.tsn_userinfo(call.message, call.from_user.id)
     elif call.data == "/requisites":
         tsn_requisites_message(call.message)
     elif call.data == "/contacts":

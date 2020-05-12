@@ -21,7 +21,7 @@ def tsn(message):
     bot.send_message(message.chat.id, "Выберите раздел\n", reply_markup=tsn_keyboard)
 
 
-def tsn_userinfo(message, user_info=""):
+def tsn_userinfo(message, user_info):
     if security.check_user_id(user_info):
         message_menu = menu.get_user_info("SELECT * from users;")
         tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
