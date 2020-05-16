@@ -6,9 +6,9 @@ from telebot import types
 import keyboards
 import menu
 import utilities
+import news
 
 import tsn
-
 
 bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 
@@ -16,13 +16,14 @@ bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 # -----------------------------------------Messages handlers------------------------------------------------------
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    message_menu = menu.get_menu("SELECT text FROM menu_text WHERE name LIKE 'start'")\
+    message_menu = menu.get_menu("SELECT text FROM menu_text WHERE name LIKE 'start'") \
         .format(message.from_user.first_name)
     start_keyboard = types.InlineKeyboardMarkup(row_width=1)
     menu_button = types.InlineKeyboardButton(text="Показать все доступные команды", callback_data="/menu")
     url_button = types.InlineKeyboardButton(text="Документация проекта", url="https://github.com/rjeka/ldMayakBot")
     start_keyboard.add(menu_button, url_button)
     bot.send_message(message.chat.id, message_menu, reply_markup=start_keyboard)
+
 
 # help menu
 @bot.message_handler(commands=['help', 'menu'])
@@ -34,43 +35,30 @@ def help_message(message):
     tsn_button = types.InlineKeyboardButton(text="/tsn - показать информацию о ТСН", callback_data='/tsn')
     government_button = types.InlineKeyboardButton(text="/government - информация о госорганах",
                                                    callback_data="/government")
+    services_button = types.InlineKeyboardButton(text="/services - список услуг", callback_data='/services')
     bill_button = types.InlineKeyboardButton(text="/bill - квитанция за КУ", callback_data="/bill")
     check_button = types.InlineKeyboardButton(text="/check - проверка платежей и наличия задолженности",
                                               callback_data="/check")
     news_button = types.InlineKeyboardButton(text="/news - показать новости", callback_data="/news")
 
-    help_keyboard.add(start_button, help_button, tsn_button, government_button, bill_button, check_button, news_button)
+    help_keyboard.add(start_button, help_button, tsn_button, services_button, government_button, bill_button,
+                      check_button, news_button)
     bot.send_message(message.chat.id, message_menu, reply_markup=help_keyboard)
 
-# tsn menu
+
+
 @bot.message_handler(commands=['tsn'])
 def tsn_message(message):
     tsn.tsn(message)
 
 
 
-@bot.message_handler(commands=['requisites'])
-def tsn_requisites_message(message):
-    message_menu = menu.get_menu("SELECT text FROM tsn_info WHERE name LIKE 'requisites'")
-    tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
-    tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
-    tsn_keyboard.add(tsn_button)
-    keyboards.main_menu_key(tsn_keyboard)
-    bot.send_message(message.chat.id, message_menu, reply_markup=tsn_keyboard)
+
 
 
 @bot.message_handler(commands=['contacts'])
 def tsn_contacts_message(message):
     message_menu = menu.get_menu("SELECT text FROM tsn_info WHERE name LIKE 'contacts'")
-    tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
-    tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
-    tsn_keyboard.add(tsn_button)
-    keyboards.main_menu_key(tsn_keyboard)
-    bot.send_message(message.chat.id, message_menu, reply_markup=tsn_keyboard)
-
-@bot.message_handler(commands=['street'])
-def tsn_streets_message(message):
-    message_menu = menu.all_street("SELECT name FROM street")
     tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
     tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
     tsn_keyboard.add(tsn_button)
@@ -100,9 +88,8 @@ def check_message(message):
 
 @bot.message_handler(commands=['news'])
 def news_message(message):
-    news_keyboard = types.InlineKeyboardMarkup(row_width=1)
-    keyboards.main_menu_key(news_keyboard)
-    bot.send_message(message.chat.id, 'К сожалению в данный момент раздел в разработке', reply_markup=news_keyboard)
+    news.news(message)
+
 
 
 @bot.message_handler(content_types=["text"])
@@ -112,14 +99,8 @@ def default_text(message):
     bot.send_message(message.chat.id, 'К сожалению я не знаю такой команды', reply_markup=default_keyboard)
 
 
-def get_id_message(message, user_info):
-    get_id_keyboard = types.InlineKeyboardMarkup(row_width=1)
-    keyboards.main_menu_key(get_id_keyboard)
-    bot.send_message(message.chat.id, "Ваш telegram ID: " + str(user_info), reply_markup=get_id_keyboard)
-
-
-
 # -----------------------------------------------Keyboard handlers----------------------------------
+
 # main menu keyboard handler
 @bot.callback_query_handler(func=lambda call: call.data in ["/start", "/menu", "/tsn", "/government", "/bill",
                                                             "/check", "/news"])
@@ -141,16 +122,17 @@ def callback_main_command(call):
 
 
 # tsn keyboard handler
-@bot.callback_query_handler(func=lambda call: call.data in ["/userinfo", "/requisites", "/contacts", "/street", "/getid"])
+@bot.callback_query_handler(
+    func=lambda call: call.data in ["/userinfo", "/requisites", "/contacts", "/street", "/getid"])
 def callback_tsn_command(call):
     if call.data == "/userinfo":
         tsn.tsn_userinfo(call.message, call.from_user.id)
     elif call.data == "/requisites":
-        tsn_requisites_message(call.message)
+        tsn.tsn_requisites(call.message)
     elif call.data == "/contacts":
         tsn_contacts_message(call.message)
     elif call.data == "/street":
-        tsn_streets_message(call.message)
+        tsn.tsn_streets(call.message)
     elif call.data == "/getid":
         utilities.get_id(call.message, call.from_user.id)
 

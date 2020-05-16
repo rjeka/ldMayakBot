@@ -36,3 +36,21 @@ def tsn_userinfo(message, user_info):
         tsn_keyboard.add(get_id_button)
         keyboards.main_menu_key(tsn_keyboard)
         bot.send_message(message.chat.id, message_menu, reply_markup=tsn_keyboard)
+
+
+def tsn_requisites(message):
+    message_menu = menu.get_menu("SELECT text FROM tsn_info WHERE name LIKE 'requisites'")
+    tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
+    tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
+    tsn_keyboard.add(tsn_button)
+    keyboards.main_menu_key(tsn_keyboard)
+    bot.send_message(message.chat.id, message_menu, reply_markup=tsn_keyboard)
+
+
+def tsn_streets(message):
+    message_menu = menu.all_street("SELECT name FROM street")
+    tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
+    tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
+    tsn_keyboard.add(tsn_button)
+    keyboards.main_menu_key(tsn_keyboard)
+    bot.send_message(message.chat.id, message_menu, reply_markup=tsn_keyboard)
