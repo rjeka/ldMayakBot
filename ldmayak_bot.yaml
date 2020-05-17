@@ -1,6 +1,15 @@
 version: '3.1'
 
 services:
+  bot:
+    image: ldmayakbot:0.0.2
+    environment:
+      DB_NAME: ${POSTGRES_NAME}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASS: ${POSTGRES_USER_PASS}
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+
 
   postgres:
     image: postgres:12
@@ -9,7 +18,7 @@ services:
     - "15432:5432"
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASS}
+      POSTGRES_PASSWORD: ${POSTGRES_ROOT_PASS}
     volumes:
       - /Users/rodionov/Documents/ldMayakBot/Postgres:/var/lib/postgresql/data
     networks:
