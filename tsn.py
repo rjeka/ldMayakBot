@@ -23,7 +23,7 @@ def tsn(message):
 
 def tsn_userinfo(message, user_info):
     if security.check_user_id(user_info):
-        message_menu = menu.get_user_info("SELECT * from users;")
+        message_menu = menu.get_user_info("SELECT * from users WHERE telegram_id={};".format(user_info))
         tsn_keyboard = types.InlineKeyboardMarkup(row_width=1)
         tsn_button = types.InlineKeyboardButton(text="Вернуться в меню ТСН", callback_data="/tsn")
         tsn_keyboard.add(tsn_button)

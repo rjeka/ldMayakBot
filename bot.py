@@ -7,19 +7,20 @@ import keyboards
 import menu
 import utilities
 import news
+import services
 
 import tsn
 
 bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 
 
-# -----------------------------------------Messages handlers------------------------------------------------------
+# -----------------------------------------Main menu messages handlers------------------------------
 @bot.message_handler(commands=['start'])
 def start_message(message):
     message_menu = menu.get_menu("SELECT text FROM menu_text WHERE name LIKE 'start'") \
         .format(message.from_user.first_name)
     start_keyboard = types.InlineKeyboardMarkup(row_width=1)
-    menu_button = types.InlineKeyboardButton(text="Показать все доступные команды", callback_data="/menu")
+    menu_button = types.InlineKeyboardButton(text="Начать работу", callback_data="/menu")
     url_button = types.InlineKeyboardButton(text="Документация проекта", url="https://github.com/rjeka/ldMayakBot")
     start_keyboard.add(menu_button, url_button)
     bot.send_message(message.chat.id, message_menu, reply_markup=start_keyboard)
@@ -51,9 +52,9 @@ def help_message(message):
 def tsn_message(message):
     tsn.tsn(message)
 
-
-
-
+@bot.message_handler(commands=['services'])
+def services_message(message):
+    services.services(message)
 
 
 @bot.message_handler(commands=['contacts'])
@@ -91,7 +92,6 @@ def news_message(message):
     news.news(message)
 
 
-
 @bot.message_handler(content_types=["text"])
 def default_text(message):
     default_keyboard = types.InlineKeyboardMarkup(row_width=1)
@@ -102,7 +102,7 @@ def default_text(message):
 # -----------------------------------------------Keyboard handlers----------------------------------
 
 # main menu keyboard handler
-@bot.callback_query_handler(func=lambda call: call.data in ["/start", "/menu", "/tsn", "/government", "/bill",
+@bot.callback_query_handler(func=lambda call: call.data in ["/start", "/menu", "/tsn", "/services", "/government", "/bill",
                                                             "/check", "/news"])
 def callback_main_command(call):
     if call.data == "/start":
@@ -111,6 +111,8 @@ def callback_main_command(call):
         help_message(call.message)
     elif call.data == "/tsn":
         tsn_message(call.message)
+    elif call.data == "/services":
+        services_message(call.message)
     elif call.data == "/government":
         government_message(call.message)
     elif call.data == "/bill":
@@ -136,6 +138,14 @@ def callback_tsn_command(call):
     elif call.data == "/getid":
         utilities.get_id(call.message, call.from_user.id)
 
+# services keyboard handler
+@bot.callback_query_handler(
+    func=lambda call: call.data in ["windows"])
+def callback_tsn_command(call):
+    if call.data == "windows":
+        services.get_servises(call.message, call.from_user.id, call.data)
+
+#--------------------------------------main___________________________________
 
 if __name__ == '__main__':
     bot.infinity_polling()
