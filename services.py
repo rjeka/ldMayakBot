@@ -10,7 +10,7 @@ import menu
 
 bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 
-
+# main services menu
 def services(message):
     services_keyboard = types.InlineKeyboardMarkup(row_width=2)
     bulk_button = types.InlineKeyboardButton(text="Сыпучие материалы", callback_data="bulk")
@@ -29,7 +29,7 @@ def services(message):
     bot.send_message(message.chat.id, "Выберите раздел с услугой:\n", reply_markup=services_keyboard)
 
 
-
+# get services from Postgres if telegrams id in the white list and if all utility bill is payed
 def get_servises(message, user_info, service_group):
     if security.check_user_id(user_info):
         con = psycopg2.connect(
@@ -54,7 +54,7 @@ def get_servises(message, user_info, service_group):
                 bot.send_message(message.chat.id, "К сожалению в данном разделе пока нет записей",
                                  reply_markup=services_keyboard)
             else:
-                for row in (rows):
+                for row in rows:
                     bot_message = ""
                     if row[0]:
                         bot_message = bot_message + row[0] + "\n\n"
