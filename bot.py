@@ -47,10 +47,10 @@ def help_message(message):
     bot.send_message(message.chat.id, message_menu, reply_markup=help_keyboard)
 
 
-
 @bot.message_handler(commands=['tsn'])
 def tsn_message(message):
     tsn.tsn(message)
+
 
 @bot.message_handler(commands=['services'])
 def services_message(message):
@@ -102,8 +102,9 @@ def default_text(message):
 # -----------------------------------------------Keyboard handlers----------------------------------
 
 # main menu keyboard handler
-@bot.callback_query_handler(func=lambda call: call.data in ["/start", "/menu", "/tsn", "/services", "/government", "/bill",
-                                                            "/check", "/news"])
+@bot.callback_query_handler(
+    func=lambda call: call.data in ["/start", "/menu", "/tsn", "/services", "/government", "/bill",
+                                    "/check", "/news"])
 def callback_main_command(call):
     if call.data == "/start":
         start_message(call.message)
@@ -163,7 +164,7 @@ def callback_tsn_command(call):
     if call.data == "auto":
         services.get_servises(call.message, call.from_user.id, call.data)
 
-#--------------------------------------main___________________________________
 
+# --------------------------------------main___________________________________
 if __name__ == '__main__':
     bot.infinity_polling()

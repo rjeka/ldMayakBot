@@ -10,6 +10,7 @@ import menu
 
 bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 
+
 # main services menu
 def services(message):
     services_keyboard = types.InlineKeyboardMarkup(row_width=2)
@@ -18,12 +19,13 @@ def services(message):
     electric_button = types.InlineKeyboardButton(text="Электрика", callback_data="electric")
     windows_button = types.InlineKeyboardButton(text="Окна, остекление", callback_data="windows")
     tractor_button = types.InlineKeyboardButton(text="Трактор, экскаватор", callback_data="tractor")
-    plumbing_button =  types.InlineKeyboardButton(text="Сантехника", callback_data="plumbing")
+    plumbing_button = types.InlineKeyboardButton(text="Сантехника", callback_data="plumbing")
     sewerage_button = types.InlineKeyboardButton(text="Канализация", callback_data="sewerage")
     clean_watter_button = types.InlineKeyboardButton(text="Очистка воды", callback_data="clean_water")
-    air_button =  types.InlineKeyboardButton(text="Конционеры, вентиляция", callback_data="air")
+    air_button = types.InlineKeyboardButton(text="Конционеры, вентиляция", callback_data="air")
     auto_button = types.InlineKeyboardButton(text="Автосервисы", callback_data="auto")
-    services_keyboard.add(bulk_button, tractor_button, well_button, electric_button, plumbing_button, clean_watter_button,
+    services_keyboard.add(bulk_button, tractor_button, well_button, electric_button, plumbing_button,
+                          clean_watter_button,
                           sewerage_button, windows_button, air_button, auto_button)
     keyboards.main_menu_key(services_keyboard)
     bot.send_message(message.chat.id, "Выберите раздел с услугой:\n", reply_markup=services_keyboard)
