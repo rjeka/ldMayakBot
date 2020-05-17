@@ -1,3 +1,8 @@
 venv/
 .idea/
 __pycache__/
+google/
+Docker/prod_compose.yaml
+Postgres/
+googletable_to_db_test.py
+db_test.py
