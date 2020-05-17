@@ -95,12 +95,7 @@ def get_servises(message, user_info, service_group):
                 bot.send_message(message.chat.id, "Запрос выполнен успешно найдено {} записи(ей)".
                                  format(len(rows)), reply_markup=services_keyboard)
     else:
-        message_menu = menu.get_menu("SELECT text FROM menu_text WHERE name LIKE 'tsn_access_deny'")
-        services_keyboard = types.InlineKeyboardMarkup(row_width=1)
-        get_id_button = types.InlineKeyboardButton(text="Получить Telegram ID", callback_data="/getid")
-        services_keyboard.add(get_id_button)
-        keyboards.main_menu_key(services_keyboard)
-        bot.send_message(message.chat.id, message_menu, reply_markup=services_keyboard)
+        security.access_deny(message)
 
 
 def services_build(message, user_info):
@@ -115,3 +110,5 @@ def services_build(message, user_info):
         services_keyboard.add(service_button)
         keyboards.main_menu_key(services_keyboard)
         bot.send_message(message.chat.id, "Выберите подраздел в разделе Строительство:\n", reply_markup=services_keyboard)
+    else:
+        security.access_deny(message)
