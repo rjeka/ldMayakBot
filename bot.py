@@ -142,14 +142,20 @@ def callback_tsn_command(call):
 
 # services keyboard handler
 @bot.callback_query_handler(
-    func=lambda call: call.data in ["bulk", "tractor", "well", "electric",
-                                    "plumbing", "windows", "clean_water", "sewerage", "auto"])
+    func=lambda call: call.data in ["bulk", "tractor", "well", "water", "warm", "land", "electric",
+                                    "plumbing", "windows", "clean_water", "sewerage", "auto", "inside_build"])
 def callback_tsn_command(call):
     if call.data == "bulk":
         services.get_servises(call.message, call.from_user.id, call.data)
     if call.data == "tractor":
         services.get_servises(call.message, call.from_user.id, call.data)
     if call.data == "well":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "water":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "warm":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "land":
         services.get_servises(call.message, call.from_user.id, call.data)
     if call.data == "electric":
         services.get_servises(call.message, call.from_user.id, call.data)
@@ -162,6 +168,25 @@ def callback_tsn_command(call):
     if call.data == "windows":
         services.get_servises(call.message, call.from_user.id, call.data)
     if call.data == "auto":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "inside_build":
+        services.get_servises(call.message, call.from_user.id, call.data)
+
+
+# service -> build keyboard handler
+@bot.callback_query_handler(
+    func=lambda call: call.data in ["build", "build_house", "build_roof", "build_facade",
+                                    "build_other"])
+def callback_tsn_command(call):
+    if call.data == "build":
+        services.services_build(call.message, call.from_user.id)
+    if call.data == "build_house":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "build_roof":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "build_facade":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "build_other":
         services.get_servises(call.message, call.from_user.id, call.data)
 
 

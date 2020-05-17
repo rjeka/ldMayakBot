@@ -14,20 +14,28 @@ bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 # main services menu
 def services(message):
     services_keyboard = types.InlineKeyboardMarkup(row_width=2)
+
+    build_button = types.InlineKeyboardButton(text="Строительство", callback_data="build")
+    inside_build_button = types.InlineKeyboardButton(text="Внутренняя отделка", callback_data="inside_build")
     bulk_button = types.InlineKeyboardButton(text="Сыпучие материалы", callback_data="bulk")
+    land_button = types.InlineKeyboardButton(text="Ландшафт, геодезия", callback_data="land")
     well_button = types.InlineKeyboardButton(text="Колодцы, скважины", callback_data="well")
+    water_button = types.InlineKeyboardButton(text="Вода доставка", callback_data="water")
+    warm_button = types.InlineKeyboardButton(text="Отопление", callback_data="warm")
     electric_button = types.InlineKeyboardButton(text="Электрика", callback_data="electric")
     windows_button = types.InlineKeyboardButton(text="Окна, остекление", callback_data="windows")
     tractor_button = types.InlineKeyboardButton(text="Трактор, экскаватор", callback_data="tractor")
     plumbing_button = types.InlineKeyboardButton(text="Сантехника", callback_data="plumbing")
     sewerage_button = types.InlineKeyboardButton(text="Канализация", callback_data="sewerage")
     clean_watter_button = types.InlineKeyboardButton(text="Очистка воды", callback_data="clean_water")
-    air_button = types.InlineKeyboardButton(text="Конционеры, вентиляция", callback_data="air")
+    air_button = types.InlineKeyboardButton(text="Кондиционеры и тд", callback_data="air")
     auto_button = types.InlineKeyboardButton(text="Автосервисы", callback_data="auto")
-    services_keyboard.add(bulk_button, tractor_button, well_button, electric_button, plumbing_button,
-                          clean_watter_button,
+
+    services_keyboard.add(build_button, inside_build_button, bulk_button, tractor_button, well_button, warm_button, water_button, land_button,
+                          electric_button, plumbing_button, clean_watter_button,
                           sewerage_button, windows_button, air_button, auto_button)
     keyboards.main_menu_key(services_keyboard)
+
     bot.send_message(message.chat.id, "Выберите раздел с услугой:\n", reply_markup=services_keyboard)
 
 
@@ -77,8 +85,9 @@ def get_servises(message, user_info, service_group):
                     if row[8]:
                         bot_message = bot_message + "Дополнительная информация:\n" + row[8] + "\n\n"
 
-                    bot.send_message(message.chat.id, bot_message)
                     time.sleep(1)
+                    bot.send_message(message.chat.id, bot_message)
+
 
                 service_button = types.InlineKeyboardButton(text="Вернуться в меню услуг", callback_data="/services")
                 services_keyboard.add(service_button)
@@ -92,3 +101,17 @@ def get_servises(message, user_info, service_group):
         services_keyboard.add(get_id_button)
         keyboards.main_menu_key(services_keyboard)
         bot.send_message(message.chat.id, message_menu, reply_markup=services_keyboard)
+
+
+def services_build(message, user_info):
+    if security.check_user_id(user_info):
+        services_keyboard = types.InlineKeyboardMarkup(row_width=2)
+        house_button = types.InlineKeyboardButton(text="Дома", callback_data="build_house")
+        roof_button = types.InlineKeyboardButton(text="Кровля", callback_data="build_roof")
+        facade_button = types.InlineKeyboardButton(text="Фасадные работы", callback_data="build_facade")
+        other_button = types.InlineKeyboardButton(text="Разное", callback_data="build_other")
+        service_button = types.InlineKeyboardButton(text="Вернуться в меню услуг", callback_data="/services")
+        services_keyboard.add(house_button, roof_button, facade_button, other_button)
+        services_keyboard.add(service_button)
+        keyboards.main_menu_key(services_keyboard)
+        bot.send_message(message.chat.id, "Выберите подраздел в разделе Строительство:\n", reply_markup=services_keyboard)
