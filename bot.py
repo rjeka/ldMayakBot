@@ -138,11 +138,29 @@ def callback_tsn_command(call):
     elif call.data == "/getid":
         utilities.get_id(call.message, call.from_user.id)
 
+
 # services keyboard handler
 @bot.callback_query_handler(
-    func=lambda call: call.data in ["windows"])
+    func=lambda call: call.data in ["bulk", "tractor", "well", "electric",
+                                    "plumbing", "windows", "clean_water", "sewerage", "auto"])
 def callback_tsn_command(call):
+    if call.data == "bulk":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "tractor":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "well":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "electric":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "plumbing":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "clean_water":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "sewerage":
+        services.get_servises(call.message, call.from_user.id, call.data)
     if call.data == "windows":
+        services.get_servises(call.message, call.from_user.id, call.data)
+    if call.data == "auto":
         services.get_servises(call.message, call.from_user.id, call.data)
 
 #--------------------------------------main___________________________________
