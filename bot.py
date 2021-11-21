@@ -40,6 +40,7 @@ def admin_message(message):
     bot.send_message(message.chat.id, message_menu.format(message.from_user.first_name, message.from_user.id))
 
 
+# -----------------------------------------add tg id handlers------------------------------
 @bot.message_handler(commands=['add'])
 def add_message(message):
     if security.check_user_id(message.from_user.id):
