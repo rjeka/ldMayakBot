@@ -17,6 +17,7 @@ def get_job_status(table, user_id):
             response: str = ';'.join(map(','.join, rows))
             con.commit()
             cur.close()
+    print(response)
     return response
 
 
