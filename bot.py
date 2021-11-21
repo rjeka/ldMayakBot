@@ -2,7 +2,7 @@ import os
 import telebot
 import menu
 import security
-import add
+import db
 
 bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 
@@ -43,24 +43,14 @@ def admin_message(message):
 @bot.message_handler(commands=['add'])
 def add_message(message):
     bot.send_message(message.chat.id, "Введите Telegram ID")
+    db.set_job_status("add_condition", message.chat.id, "tg_id")
 
 
-@bot.message_handler(func=lambda message: message.chat.id == "Введите Telegram ID")
+@bot.message_handler(func=lambda message: db.get_job_status(message.chat.id, 'add_condition') == 'tg_id')
 def telegram_id_message(message):
-    if not message.text.isdigit():
-        bot.send_message(message.chat.id, "Вы ввели не правильный Telegram ID \nПопробуйте еще раз")
-    else:
-        bot.send_message(message.chat.id, "Telegram ID: {}".format(message.text))
-        bot.send_message(message.chat.id, "Введите номер л\с")
-
-
-@bot.message_handler(func=lambda message: message.chat.id == "Введите номер л\с")
-def account_message(message):
-    if not message.text.isdigit():
-        bot.send_message(message.chat.id, "Вы ввели не правильный номер л\с \nПопробуйте еще раз")
-    else:
-        bot.send_message(message.chat.id, "Номер л\с: {}".format(message.text))
-        bot.send_message(message.chat.id, "Пользователей создан")
+    bot.send_message(message.chat.id, "Введите номер л\с")
+    db.set_job_status("add_condition", message.chat.id, "finish")
+    db.data_base_update("UPDATE add_tmp SET telegram_id = '{}'".format(message.text))
 
 
 # --------------------------------------main___________________________________
