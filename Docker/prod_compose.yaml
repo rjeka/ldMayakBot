@@ -1,21 +1,7 @@
-version: '3.1'
-
+version: '3.8'
 services:
- # bot:
- #   image: ldmayakbot:0.0.2
- #   environment:
- #     DB_NAME: ${POSTGRES_NAME}
- #     DB_USER: ${POSTGRES_USER}
- #     DB_PASS: ${POSTGRES_USER_PASS}
- #     DB_HOST: ${POSTGRES_HOST}
- #     DB_PORT: ${POSTGRES_PORT}
- #     TELEGRAM_TOKEN: ${TOKEN}
- #   networks:
- #     - prod-bot-network
-
-
   postgres:
-    image: postgres:12
+    image: postgres
     restart: always
     ports:
     - 127.0.0.1:5432:5432
@@ -23,24 +9,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_ROOT_PASS}
     volumes:
-      -  /opt/postgres:/var/lib/postgresql/data
+      -  /opt/tsn/postgres:/var/lib/postgresql/data
     networks:
       - prod-bot-network
-
-  #phppgadmin:
-  #  image: dpage/pgadmin4
-  #  restart: always
-  #  ports:
-  #    - "8080:80"
-  #  environment:
-  #    PGADMIN_DEFAULT_EMAIL: ${EMAIL}
-  #    PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS}
-  #  depends_on:
-  #    - postgres
-  #  networks:
-  #    - prod-bot-network
-
-
 networks:
   prod-bot-network:
     driver: bridge
