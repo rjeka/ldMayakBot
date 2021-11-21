@@ -1,46 +1,46 @@
 version: '3.1'
 
 services:
-  bot:
-    image: ldmayakbot:0.0.2
-    environment:
-      DB_NAME: ${POSTGRES_NAME}
-      DB_USER: ${POSTGRES_USER}
-      DB_PASS: ${POSTGRES_USER_PASS}
-      DB_HOST: ${POSTGRES_HOST}
-      DB_PORT: ${POSTGRES_PORT}
-      TELEGRAM_TOKEN: ${TOKEN}
-    networks:
-      - postgres-compose-network
+ # bot:
+ #   image: ldmayakbot:0.0.2
+ #   environment:
+ #     DB_NAME: ${POSTGRES_NAME}
+ #     DB_USER: ${POSTGRES_USER}
+ #     DB_PASS: ${POSTGRES_USER_PASS}
+ #     DB_HOST: ${POSTGRES_HOST}
+ #     DB_PORT: ${POSTGRES_PORT}
+ #     TELEGRAM_TOKEN: ${TOKEN}
+ #   networks:
+ #     - prod-bot-network
 
 
   postgres:
     image: postgres:12
     restart: always
     ports:
-    - "15432:5432"
+    - 127.0.0.1:5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_ROOT_PASS}
     volumes:
       -  /opt/postgres:/var/lib/postgresql/data
     networks:
-      - postgres-compose-network
+      - prod-bot-network
 
-  phppgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    ports:
-      - "8080:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS}
-    depends_on:
-      - postgres
-    networks:
-      - postgres-compose-network
+  #phppgadmin:
+  #  image: dpage/pgadmin4
+  #  restart: always
+  #  ports:
+  #    - "8080:80"
+  #  environment:
+  #    PGADMIN_DEFAULT_EMAIL: ${EMAIL}
+  #    PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS}
+  #  depends_on:
+  #    - postgres
+  #  networks:
+  #    - prod-bot-network
 
 
 networks:
-  postgres-compose-network:
+  prod-bot-network:
     driver: bridge
